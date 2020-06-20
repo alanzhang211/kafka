@@ -414,14 +414,14 @@ object RequestMetrics {
   val consumerFetchMetricName = ApiKeys.FETCH.name + "Consumer"
   val followFetchMetricName = ApiKeys.FETCH.name + "Follower"
 
-  val RequestsPerSec = "RequestsPerSec"
-  val RequestQueueTimeMs = "RequestQueueTimeMs"
-  val LocalTimeMs = "LocalTimeMs"
-  val RemoteTimeMs = "RemoteTimeMs"
+  val RequestsPerSec = "RequestsPerSec"//每秒处理的 Request 数，用来评估 Broker 的繁忙状态
+  val RequestQueueTimeMs = "RequestQueueTimeMs"//计算 Request 在 Request 队列中的平均等候时间，单位是毫秒。倘若 Request 在队列的等待时间过长，你通常需要增加后端 I/O 线程的数量，来加快队列中 Request 的拿取速度
+  val LocalTimeMs = "LocalTimeMs"//计算 Request 实际被处理的时间，单位是毫秒。一旦定位到这个监控项的值很大，你就需要进一步研究 Request 被处理的逻辑了，具体分析到底是哪一步消耗了过多的时间
+  val RemoteTimeMs = "RemoteTimeMs"//Kafka 的读写请求（PRODUCE 请求和 FETCH 请求）逻辑涉及等待其他 Broker 操作的步骤
   val ThrottleTimeMs = "ThrottleTimeMs"
   val ResponseQueueTimeMs = "ResponseQueueTimeMs"
   val ResponseSendTimeMs = "ResponseSendTimeMs"
-  val TotalTimeMs = "TotalTimeMs"
+  val TotalTimeMs = "TotalTimeMs"//计算 Request 被处理的完整流程时间
   val RequestBytes = "RequestBytes"
   val MessageConversionsTimeMs = "MessageConversionsTimeMs"
   val TemporaryMemoryBytes = "TemporaryMemoryBytes"

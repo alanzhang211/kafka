@@ -1497,9 +1497,9 @@ class Log(@volatile private var _dir: File,
           s"but we only have log segments in the range $logStartOffset to $endOffset.")
 
       val maxOffsetMetadata = isolation match {
-        case FetchLogEnd => endOffsetMetadata
-        case FetchHighWatermark => fetchHighWatermarkMetadata
-        case FetchTxnCommitted => fetchLastStableOffsetMetadata
+        case FetchLogEnd => endOffsetMetadata//普通消费者能够看到[Log Start Offset, LEO)之间的消息
+        case FetchHighWatermark => fetchHighWatermarkMetadata//Follower副本消费者能够看到[Log Start Offset，高水位值]之间的消息
+        case FetchTxnCommitted => fetchLastStableOffsetMetadata //事务型消费者只能看到[Log Start Offset, Log Stable Offset]之间的消息。Log Stable Offset(LSO)是比LEO值小的位移值，为Kafka事务使用
       }
 
       if (startOffset == maxOffsetMetadata.messageOffset) {
